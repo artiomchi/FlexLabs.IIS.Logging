@@ -1,5 +1,4 @@
 ﻿using Microsoft.Web.FtpServer;
-using System;
 
 namespace FlexLabs.IIS.FtpSqlBulkLogging
 {
@@ -13,30 +12,7 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
 
         public void Log(FtpLogEntry logEntry)
         {
-            var sqlEntry = new SqlFtpLogEntry
-            {
-                Time = DateTime.UtcNow,
-                ServerName = Environment.MachineName,
-                SessionID = logEntry.SessionId,
-                UserName = logEntry.UserName,
-                RemoteIPAddress = logEntry.RemoteIPAddress,
-                RemoteIPPort = logEntry.RemoteIPPort,
-                LocalIPAddress = logEntry.LocalIPAddress,
-                LocalIPPort = logEntry.LocalIPPort,
-                Information = logEntry.Information,
-                HRStatus = logEntry.HRStatus,
-                SiteName = logEntry.SiteName,
-                HostName = logEntry.HostName,
-                FtpStatus = logEntry.FtpStatus,
-                FtpSubStatus = logEntry.FtpSubStatus,
-                Command = logEntry.Command,
-                CommandParameters = logEntry.CommandParameters,
-                ElapsedMilliseconds = logEntry.ElapsedMilliseconds,
-                BytesSent = logEntry.BytesSent,
-                BytesReceived = logEntry.BytesReceived,
-                FullPath = logEntry.FullPath,
-            };
-            _bulkPushService.Add(sqlEntry);
+            _bulkPushService.Add(new SqlFtpLogEntry(logEntry));
         }
 
         protected override void Dispose(bool disposing)

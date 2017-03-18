@@ -1,9 +1,34 @@
-﻿using System;
+﻿using Microsoft.Web.FtpServer;
+using System;
 
 namespace FlexLabs.IIS.FtpSqlBulkLogging
 {
     class SqlFtpLogEntry
     {
+        public SqlFtpLogEntry(FtpLogEntry logEntry)
+        {
+            Time = DateTime.UtcNow;
+            ServerName = Environment.MachineName;
+            SessionID = logEntry.SessionId;
+            UserName = logEntry.UserName;
+            RemoteIPAddress = logEntry.RemoteIPAddress;
+            RemoteIPPort = logEntry.RemoteIPPort;
+            LocalIPAddress = logEntry.LocalIPAddress;
+            LocalIPPort = logEntry.LocalIPPort;
+            Information = logEntry.Information;
+            HRStatus = logEntry.HRStatus;
+            SiteName = logEntry.SiteName;
+            HostName = logEntry.HostName;
+            FtpStatus = logEntry.FtpStatus;
+            FtpSubStatus = logEntry.FtpSubStatus;
+            Command = logEntry.Command;
+            CommandParameters = logEntry.CommandParameters;
+            ElapsedMilliseconds = logEntry.ElapsedMilliseconds;
+            BytesSent = logEntry.BytesSent;
+            BytesReceived = logEntry.BytesReceived;
+            FullPath = logEntry.FullPath;
+        }
+
         public DateTime Time { get; set; }
         public string SessionID { get; set; }
         public string UserName { get; set; }

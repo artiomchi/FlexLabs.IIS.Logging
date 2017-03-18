@@ -13,8 +13,6 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
         private readonly string[] _propertyNames;
         private readonly Type _type;
 
-        private T CurrentEntry;
-
         public ListDataReader(IList<T> dataSource)
         {
             _enumerator = dataSource.GetEnumerator();
@@ -22,7 +20,6 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
             _properties = _type.GetProperties(BindingFlags.Instance | BindingFlags.Public).ToDictionary(p => p.Name);
             _propertyNames = _properties.Keys.ToArray();
         }
-
 
         public object this[int i] => GetValue(i);
         public object this[string name] => GetValue(name);
