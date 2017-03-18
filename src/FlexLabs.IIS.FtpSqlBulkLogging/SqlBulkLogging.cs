@@ -25,6 +25,10 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
             var batchSize = config["BatchSize"];
             if (int.TryParse(batchSize, out int batchSizeInt))
                 _bulkPushService.BatchSize = batchSizeInt;
+
+            var debug = config["Debug"];
+            if (bool.TryParse(debug, out bool debugBool) && debugBool)
+                Logger.DebugMode = true;
         }
 
         public void Log(FtpLogEntry logEntry)

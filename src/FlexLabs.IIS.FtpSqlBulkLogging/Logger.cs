@@ -7,8 +7,19 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
     {
         private const string Category = "FlexLabs.IIS.FtpSqlBulkLogging";
 
-        public static void DebugWrite(String value) => Debug.WriteLine(value, Category);
-        public static void TraceWrite(String value) => Trace.WriteLine(value, Category);
+        public static bool DebugMode = false;
+
+        public static void DebugWrite(String value)
+        {
+            if (DebugMode)
+                Trace.WriteLine(value, Category);
+            else
+                Debug.WriteLine(value, Category);
+        }
+        public static void TraceWrite(String value)
+        {
+            Trace.WriteLine(value, Category);
+        }
         public static void Exception(Exception ex)
         {
             TraceWrite($"[Exception]: {ex.Message}");
