@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Reflection;
 using System.Threading;
 
 namespace FlexLabs.IIS.FtpSqlBulkLogging
@@ -11,27 +12,25 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
         private static readonly object _flushLock = new object();
         private List<T> _queue = new List<T>();
 
-        public SqlQueuedBulkPushService(String connectionString, String tableName, Int32 batchSize, SqlBulkCopyColumnMappingCollection mappings)
+        public SqlQueuedBulkPushService(String connectionString, String tableName, Int32 batchSize)
         {
             ConnecyionString = connectionString;
             TableName = tableName;
             BatchSize = batchSize;
-            Mappings = mappings;
         }
 
         public string ConnecyionString { get; private set; }
         public string TableName { get; private set; }
         public int BatchSize { get; private set; }
-        public SqlBulkCopyColumnMappingCollection Mappings { get; private set; }
 
-        public void Dispose() => FlushQueue();
+        public void Dispose() => FlushQueue().Join();
 
         public void Add(T value)
         {
             lock (_queueLock)
             {
                 _queue.Add(value);
-                //if (_queue.Count > BatchSize)
+                if (_queue.Count >= BatchSize)
                     FlushQueue();
             }
         }
@@ -41,16 +40,16 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
             lock (_queueLock)
             {
                 _queue.AddRange(values);
-                //if (_queue.Count > BatchSize)
+                if (_queue.Count >= BatchSize)
                     FlushQueue();
             }
         }
 
-        public void FlushQueue()
+        public Thread FlushQueue()
         {
-            new Thread(() =>
+            var thread = new Thread(() =>
             {
-                lock(_flushLock)
+                lock (_flushLock)
                 {
                     if (_queue.Count == 0)
                         return;
@@ -69,7 +68,9 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
                     batch.Clear();
                     batch = null;
                 }
-            }).Start();
+            });
+            thread.Start();
+            return thread;
         }
 
         void BulkPushBatch(IList<T> batch)
@@ -83,8 +84,8 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
                 BatchSize = BatchSize,
             })
             {
-                foreach (SqlBulkCopyColumnMapping mapping in Mappings)
-                    copy.ColumnMappings.Add(mapping);
+                foreach (var prop in typeof(T).GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                    copy.ColumnMappings.Add(new SqlBulkCopyColumnMapping(prop.Name, prop.Name));
 
                 conn.Open();
                 copy.WriteToServer(reader);
