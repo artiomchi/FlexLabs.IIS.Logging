@@ -11,8 +11,8 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
         public static void TraceWrite(String value) => Trace.WriteLine(value, Category);
         public static void Exception(Exception ex)
         {
-            DebugWrite($"[Exception]: {ex.Message}");
-            DebugWrite(ex.StackTrace);
+            TraceWrite($"[Exception]: {ex.Message}");
+            TraceWrite(ex.StackTrace);
         }
     }
 }

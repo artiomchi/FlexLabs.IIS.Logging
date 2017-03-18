@@ -15,7 +15,7 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
 
         public SqlQueuedBulkPushService(String connectionString, String tableName, Int32 batchSize)
         {
-            ConnecyionString = connectionString;
+            ConnectionString = connectionString;
             TableName = tableName;
             BatchSize = batchSize;
 
@@ -24,18 +24,31 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
                 AutoReset = true,
             };
             _timer.Elapsed += (s, e) => FlushQueue();
-            _timer.Start();
         }
 
-        public string ConnecyionString { get; private set; }
-        public string TableName { get; private set; }
-        public int BatchSize { get; private set; }
+        public string ConnectionString { get; set; }
+        public string TableName { get; set; }
+        public int BatchSize { get; set; }
 
         public void Dispose()
         {
             Logger.DebugWrite("Dispose()");
             _timer.Dispose();
             FlushQueue()?.Join();
+        }
+
+        private void StopTimer()
+        {
+            if (!_timer.Enabled) return;
+            Logger.DebugWrite("StopTimer()");
+            _timer.Stop();
+        }
+
+        private void StartTimer()
+        {
+            if (_timer.Enabled) return;
+            Logger.DebugWrite("StartTimer()");
+            _timer.Start();
         }
 
         public void Add(T value)
@@ -46,6 +59,8 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
                 _queue.Add(value);
                 if (_queue.Count >= BatchSize)
                     FlushQueue();
+                else
+                    StartTimer();
             }
         }
 
@@ -57,6 +72,8 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
                 _queue.AddRange(values);
                 if (_queue.Count >= BatchSize)
                     FlushQueue();
+                else
+                    StartTimer();
             }
         }
 
@@ -89,6 +106,9 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
                         BulkPushBatch(batch);
                         batch.Clear();
                         batch = null;
+
+                        if (_queue.Count == 0)
+                            StopTimer();
                     }
                 }
                 catch (Exception ex)
@@ -104,7 +124,7 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
         {
             Logger.DebugWrite("BulkPushBatch()");
             using (var reader = new ListDataReader<T>(batch))
-            using (var conn = new SqlConnection(ConnecyionString))
+            using (var conn = new SqlConnection(ConnectionString))
             using (var copy = new SqlBulkCopy(conn, SqlBulkCopyOptions.Default, null)
             {
                 BulkCopyTimeout = 30,
