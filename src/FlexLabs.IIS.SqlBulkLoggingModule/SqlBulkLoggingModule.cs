@@ -7,8 +7,8 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
 {
     public class SqlBulkLoggingModule : IHttpModule
     {
-        SqlQueuedBulkPushService<SqlLogEntry> _bulkPushService;
-        public SqlBulkLoggingModule()
+        static SqlQueuedBulkPushService<SqlLogEntry> _bulkPushService;
+        static SqlBulkLoggingModule()
         {
             _bulkPushService = new SqlQueuedBulkPushService<SqlLogEntry>("Server=localhost;Integrated Security=true;", "flexlabs.IIS_WebLogs", 1000);
         }
@@ -26,14 +26,12 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
 
         private void Context_BeginRequest(object sender, EventArgs e)
         {
-            Logger.DebugWrite("Context_BeginRequest()");
             var stopwatch = Stopwatch.StartNew();
             HttpContext.Current.Items["Stopwatch"] = stopwatch;
         }
 
         private void Context_EndRequest(object sender, EventArgs e)
         {
-            Logger.DebugWrite("Context_EndRequest()");
             var context = HttpContext.Current;
             var stopWatch = context.Items["Stopwatch"] as Stopwatch;
             stopWatch?.Stop();
