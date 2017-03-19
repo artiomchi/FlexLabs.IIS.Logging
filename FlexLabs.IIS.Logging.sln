@@ -11,6 +11,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlexLabs.IIS.FtpSqlBulkLogg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexLabs.IIS.SqlBulkLoggingModule", "src\FlexLabs.IIS.SqlBulkLoggingModule\FlexLabs.IIS.SqlBulkLoggingModule.csproj", "{7F8EDA17-BB37-4C78-AC9E-8744B3A71328}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlexLabs.IIS.Logging", "src\FlexLabs.IIS.Logging\FlexLabs.IIS.Logging.csproj", "{BB04950A-4423-4E5C-BF1B-8A75CC5E6D9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication", "test\WebApplication\WebApplication.csproj", "{B4D14C66-E37F-48B3-AF37-6C9A5C835052}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{7F8EDA17-BB37-4C78-AC9E-8744B3A71328}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F8EDA17-BB37-4C78-AC9E-8744B3A71328}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F8EDA17-BB37-4C78-AC9E-8744B3A71328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB04950A-4423-4E5C-BF1B-8A75CC5E6D9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB04950A-4423-4E5C-BF1B-8A75CC5E6D9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB04950A-4423-4E5C-BF1B-8A75CC5E6D9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB04950A-4423-4E5C-BF1B-8A75CC5E6D9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4D14C66-E37F-48B3-AF37-6C9A5C835052}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D14C66-E37F-48B3-AF37-6C9A5C835052}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D14C66-E37F-48B3-AF37-6C9A5C835052}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D14C66-E37F-48B3-AF37-6C9A5C835052}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,5 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B13C4FD6-1247-4A52-86E8-C70CC606C184} = {E414BD3C-BA00-426D-9173-169FF23144C8}
 		{7F8EDA17-BB37-4C78-AC9E-8744B3A71328} = {E414BD3C-BA00-426D-9173-169FF23144C8}
+		{BB04950A-4423-4E5C-BF1B-8A75CC5E6D9E} = {E414BD3C-BA00-426D-9173-169FF23144C8}
+		{B4D14C66-E37F-48B3-AF37-6C9A5C835052} = {650E46D0-BDBB-40DE-BA5E-56856846BF15}
 	EndGlobalSection
 EndGlobal

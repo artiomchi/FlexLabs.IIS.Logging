@@ -1,4 +1,5 @@
-﻿using Microsoft.Web.FtpServer;
+﻿using FlexLabs.IIS.Logging;
+using Microsoft.Web.FtpServer;
 using System;
 
 namespace FlexLabs.IIS.FtpSqlBulkLogging

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace FlexLabs.IIS.FtpSqlBulkLogging
+namespace FlexLabs.IIS.Logging
 {
     public static class Logger
     {
-        private const string Category = "FlexLabs.IIS.FtpSqlBulkLogging";
+        private static string Category = typeof(Logger).Assembly.GetName().Name;
 
         public static bool DebugMode = false;
 

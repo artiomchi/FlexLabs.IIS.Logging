@@ -4,15 +4,6 @@
     <TargetFramework>net35</TargetFramework>
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\Keys\FlexLabsStrongKey.pfx</AssemblyOriginatorKeyFile>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Web" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="..\FlexLabs.IIS.Logging\*.cs" />
-  </ItemGroup>
 
 </Project>

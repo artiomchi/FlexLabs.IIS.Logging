@@ -14,4 +14,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\FlexLabs.IIS.Logging\*.cs" />
+  </ItemGroup>
+
 </Project>

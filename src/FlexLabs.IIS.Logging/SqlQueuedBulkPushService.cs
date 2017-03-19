@@ -4,9 +4,9 @@ using System.Data.SqlClient;
 using System.Reflection;
 using System.Threading;
 
-namespace FlexLabs.IIS.FtpSqlBulkLogging
+namespace FlexLabs.IIS.Logging
 {
-    class SqlQueuedBulkPushService<T> : IDisposable
+    public class SqlQueuedBulkPushService<T> : IDisposable
     {
         private static readonly object _queueLock = new object();
         private static readonly object _flushLock = new object();

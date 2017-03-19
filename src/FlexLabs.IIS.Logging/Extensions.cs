@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace FlexLabs.IIS.FtpSqlBulkLogging
+namespace FlexLabs.IIS.Logging
 {
     public static class Extensions
     {

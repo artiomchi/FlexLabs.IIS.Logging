@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 
-namespace FlexLabs.IIS.FtpSqlBulkLogging
+namespace FlexLabs.IIS.Logging
 {
     class ListDataReader<T> : IDataReader
     {
