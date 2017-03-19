@@ -25,8 +25,9 @@ CREATE TABLE [flexlabs].[IIS_FtpLogs](
     [BytesSent] [bigint] NOT NULL,
     [BytesReceived] [bigint] NOT NULL,
     [ElapsedMilliseconds] [int] NOT NULL,
-    [UserAgent] [nvarchar](1024) NOT NULL,
+    [UserAgent] [nvarchar](1024) NULL,
     [Referrer] [nvarchar](512) NULL,
+    [ReferrerHost] [nvarchar](255) NULL,
 )
 
 -- Temporary index to force align the table for the columnstore index

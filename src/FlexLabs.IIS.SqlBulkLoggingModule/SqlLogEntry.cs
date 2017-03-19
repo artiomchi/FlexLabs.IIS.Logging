@@ -24,5 +24,6 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
         public int ElapsedMilliseconds { get; set; }
         public string UserAgent { get; set; }
         public string Referrer { get; set; }
+        public string ReferrerHost { get; set; }
     }
 }

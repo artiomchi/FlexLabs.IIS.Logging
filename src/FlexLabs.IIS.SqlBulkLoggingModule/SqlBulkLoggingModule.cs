@@ -16,14 +16,22 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            _bulkPushService.FlushQueue()?.Join();
         }
 
         public void Init(HttpApplication context)
         {
             var connectionString = ConfigurationManager.ConnectionStrings["FlexLabs.IIS.SqlBulkLogging"]?.ConnectionString;
             if (connectionString != null)
+            {
                 _bulkPushService.ConnectionString = connectionString;
+            }
+            else
+            {
+                connectionString = ConfigurationManager.AppSettings["FlexLabs.IIS.SqlBulkLogging.ConnectionString"];
+                if (connectionString != null)
+                    _bulkPushService.ConnectionString = connectionString;
+            }
 
             var tableName = ConfigurationManager.AppSettings["FlexLabs.IIS.SqlBulkLogging.TableName"];
             if (tableName != null)
@@ -72,8 +80,9 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
                 BytesSent = TryParseInt(context.Response.Headers["Content-Length"]),
                 BytesReceived = TryParseInt(context.Request.ServerVariables["CONTENT_LENGTH"]),
                 ElapsedMilliseconds = Convert.ToInt32(stopWatch.ElapsedMilliseconds),
-                UserAgent = context.Request.UserAgent ?? string.Empty,
+                UserAgent = context.Request.UserAgent.NullIfEmpty(),
                 Referrer = context.Request.UrlReferrer?.ToString(),
+                ReferrerHost = context.Request.UrlReferrer?.Host,
             });
         }
 
