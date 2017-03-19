@@ -9,28 +9,28 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
         {
             Time = DateTime.UtcNow;
             ServerName = Environment.MachineName;
-            SessionID = logEntry.SessionId;
-            UserName = logEntry.UserName;
-            RemoteIPAddress = logEntry.RemoteIPAddress;
+            SessionID = logEntry.SessionId.ParseToGuid();
+            UserName = logEntry.UserName.NullIfEmpty();
+            RemoteIPAddress = logEntry.RemoteIPAddress ?? string.Empty;
             RemoteIPPort = logEntry.RemoteIPPort;
-            LocalIPAddress = logEntry.LocalIPAddress;
+            LocalIPAddress = logEntry.LocalIPAddress ?? string.Empty;
             LocalIPPort = logEntry.LocalIPPort;
-            Information = logEntry.Information;
+            Information = logEntry.Information.NullIfEmpty();
             HRStatus = logEntry.HRStatus;
-            SiteName = logEntry.SiteName;
-            HostName = logEntry.HostName;
+            SiteName = logEntry.SiteName ?? string.Empty;
+            HostName = logEntry.HostName.NullIfEmpty();
             FtpStatus = logEntry.FtpStatus;
             FtpSubStatus = logEntry.FtpSubStatus;
-            Command = logEntry.Command;
-            CommandParameters = logEntry.CommandParameters;
+            Command = logEntry.Command ?? string.Empty;
+            CommandParameters = logEntry.CommandParameters.NullIfEmpty();
             ElapsedMilliseconds = logEntry.ElapsedMilliseconds;
             BytesSent = logEntry.BytesSent;
             BytesReceived = logEntry.BytesReceived;
-            FullPath = logEntry.FullPath;
+            FullPath = logEntry.FullPath.NullIfEmpty();
         }
 
         public DateTime Time { get; set; }
-        public string SessionID { get; set; }
+        public Guid SessionID { get; set; }
         public string UserName { get; set; }
         public string RemoteIPAddress { get; set; }
         public int RemoteIPPort { get; set; }
