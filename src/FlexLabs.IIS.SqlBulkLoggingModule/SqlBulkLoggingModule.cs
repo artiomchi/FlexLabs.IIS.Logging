@@ -71,11 +71,13 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
                 RemoteIPPort = TryParseInt(context.Request.ServerVariables["REMOTE_PORT"]),
                 LocalIPAddress = context.Request.ServerVariables["LOCAL_ADDR"] ?? string.Empty,
                 LocalIPPort = TryParseInt(context.Request.ServerVariables["SERVER_PORT"]),
-                SiteName = GetSiteName(),
+                SiteName = System.Web.Hosting.HostingEnvironment.SiteName,
                 HostName = context.Request.Url.Host,
                 Method = context.Request.HttpMethod,
                 UriStem = context.Request.Url.AbsolutePath,
-                UriQuery = context.Request.Url.Query?.Substring(1).NullIfEmpty(),
+                UriQuery = context.Request.Url.Query?.Length > 1
+                    ? context.Request.Url.Query.Substring(1)
+                    : null,
                 Status = context.Response.StatusCode,
                 SubStatus = context.Response.SubStatusCode,
                 BytesSent = TryParseInt(context.Response.Headers["Content-Length"]),
@@ -85,18 +87,6 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
                 Referrer = context.Request.UrlReferrer?.ToString(),
                 ReferrerHost = context.Request.UrlReferrer?.Host,
             });
-        }
-
-        private string GetSiteName()
-        {
-            try
-            {
-                return System.Web.Hosting.HostingEnvironment.ApplicationHost?.GetSiteName();
-            }
-            catch
-            {
-                return null;
-            }
         }
 
         private int TryParseInt(string value)
