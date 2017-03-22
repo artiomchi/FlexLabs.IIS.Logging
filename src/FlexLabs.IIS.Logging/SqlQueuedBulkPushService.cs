@@ -29,6 +29,7 @@ namespace FlexLabs.IIS.Logging
         public string ConnectionString { get; set; }
         public string TableName { get; set; }
         public int BatchSize { get; set; }
+        public bool SynchronousBatches { get; set; }
 
         public void Dispose()
         {
@@ -67,14 +68,17 @@ namespace FlexLabs.IIS.Logging
         public void AddRange(IEnumerable<T> values)
         {
             Logger.DebugWrite("AddRange()");
+            Thread flushThread = null;
             lock (_queueLock)
             {
                 _queue.AddRange(values);
                 if (_queue.Count >= BatchSize)
-                    FlushQueue();
+                    flushThread = FlushQueue();
                 else
                     StartTimer();
             }
+            if (SynchronousBatches && flushThread != null)
+                flushThread.Join();
         }
 
         public Thread FlushQueue()

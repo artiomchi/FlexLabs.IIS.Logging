@@ -1,7 +1,7 @@
 ﻿using FlexLabs.IIS.Logging;
 using System;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace FlexLabs.IIS.LogIngester
@@ -48,6 +48,7 @@ namespace FlexLabs.IIS.LogIngester
             if (!proceed.Equals("y"))
                 return;
 
+            var sw = Stopwatch.StartNew();
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Default"].ConnectionString;
             if (logType.Equals("ftp"))
             {
@@ -58,20 +59,28 @@ namespace FlexLabs.IIS.LogIngester
                 ProcessLogs<W3LogItem>(serverName, siteName, defaultHost, connectionString, "flexlabs.IIS_WebLogs", files);
             }
 
+            sw.Stop();
+            Console.WriteLine($"Uploaded in {sw.Elapsed}");
             Console.ReadLine();
         }
 
         void ProcessLogs<TLogItem>(string serverName, string siteName, string defaultHost, string connectionString, string tableName, string[] files) where TLogItem : LogItem
         {
-            var parser = new LogParser<TLogItem>(serverName, siteName, defaultHost);
-            using (var bulkPushService = new SqlQueuedBulkPushService<TLogItem>(connectionString, tableName, 1000))
+            var parserLoader = new LogParserLoader<TLogItem>(serverName, siteName, defaultHost);
+            using (var bulkPushService = new SqlQueuedBulkPushService<TLogItem>(connectionString, tableName, 1000) { SynchronousBatches = true })
             {
                 foreach (var file in files)
                 {
+                    var parser = parserLoader.LoadFile(file);
                     var counter = 0;
-                    var logs = parser.ParseFile(file)
-                        .Select(l => { counter++; return l; });
-                    bulkPushService.AddRange(logs);
+
+                    do
+                    {
+                        var logs = parser.ReadNext(1000);
+                        bulkPushService.AddRange(logs);
+                        counter += parser.LinesRead;
+                    }
+                    while (parser.LinesRead > 0);
                     Console.WriteLine($"[{file}]: {counter}");
                 }
             }
