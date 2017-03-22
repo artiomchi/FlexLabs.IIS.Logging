@@ -4,7 +4,8 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
 {
     class SqlLogEntry
     {
-        public DateTime Time { get; set; }
+        public DateTime Date { get; set; }
+        public TimeSpan Time { get; set; }
         public string ServerName { get; set; }
         public Guid? SessionID { get; set; }
         public string UserName { get; set; }

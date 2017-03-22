@@ -8,7 +8,8 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
     {
         public SqlFtpLogEntry(FtpLogEntry logEntry)
         {
-            Time = DateTime.UtcNow;
+            Date = DateTime.UtcNow;
+            Time = DateTime.UtcNow.TimeOfDay;
             ServerName = Environment.MachineName;
             SessionID = logEntry.SessionId.ParseToGuid();
             UserName = logEntry.UserName.NullIfEmpty();
@@ -30,7 +31,8 @@ namespace FlexLabs.IIS.FtpSqlBulkLogging
             FullPath = logEntry.FullPath.NullIfEmpty();
         }
 
-        public DateTime Time { get; set; }
+        public DateTime Date { get; set; }
+        public TimeSpan Time { get; set; }
         public Guid SessionID { get; set; }
         public string UserName { get; set; }
         public string RemoteIPAddress { get; set; }

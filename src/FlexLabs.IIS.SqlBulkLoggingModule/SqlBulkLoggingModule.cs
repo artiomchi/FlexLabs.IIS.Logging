@@ -62,7 +62,8 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
             stopWatch?.Stop();
             _bulkPushService.Add(new SqlLogEntry
             {
-                Time = DateTime.UtcNow,
+                Date = DateTime.UtcNow,
+                Time = DateTime.UtcNow.TimeOfDay,
                 ServerName = Environment.MachineName,
                 SessionID = context.Session?.SessionID.ParseToGuid(),
                 UserName = (context.User?.Identity?.Name).NullIfEmpty(),
@@ -74,7 +75,7 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
                 HostName = context.Request.Url.Host,
                 Method = context.Request.HttpMethod,
                 UriStem = context.Request.Url.AbsolutePath,
-                UriQuery = context.Request.Url.Query.NullIfEmpty(),
+                UriQuery = context.Request.Url.Query?.Substring(1).NullIfEmpty(),
                 Status = context.Response.StatusCode,
                 SubStatus = context.Response.SubStatusCode,
                 BytesSent = TryParseInt(context.Response.Headers["Content-Length"]),
