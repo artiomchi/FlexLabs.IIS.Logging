@@ -34,7 +34,7 @@ CREATE TABLE [flexlabs].[IIS_WebLogs](
     [BytesReceived] [bigint] NOT NULL,
     [ElapsedMilliseconds] [int] NOT NULL,
     [UserAgent] [nvarchar](1024) NULL,
-    [Referrer] [nvarchar](512) NULL,
+    [Referrer] [nvarchar](2048) NULL,
     [ReferrerHost] [nvarchar](255) NULL,
 )
 

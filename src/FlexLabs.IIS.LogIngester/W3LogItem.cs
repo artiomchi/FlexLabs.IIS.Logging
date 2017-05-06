@@ -21,14 +21,14 @@ namespace FlexLabs.IIS.LogIngester
         public int Status => Get<int>("sc-status");
         public int SubStatus => Get<int>("sc-substatus");
         public string Method => Get("cs-method") ?? string.Empty;
-        public string UriStem => Get("cs-uri-stem").NullIfEmpty();
+        public string UriStem => Get("cs-uri-stem").NullIfEmpty().Truncate(2048);
+        public string UriQuery => Get("cs-uri-query").NullIfEmpty().Truncate(2048);
         public int ElapsedMilliseconds => Get<int>("time-taken");
         public long BytesSent => Get<int>("sc-bytes");
         public long BytesReceived => Get<int>("cs-bytes");
         public string HostName => Get("cs-host") ?? DefaultHost ?? string.Empty;
-        public string UriQuery => Get("cs-uri-query").NullIfEmpty();
         public string UserAgent => Get("cs(User-Agent)").NullIfEmpty();
-        public string Referrer => Get("cs(Referer)").NullIfEmpty();
+        public string Referrer => Get("cs(Referer)").NullIfEmpty().Truncate(2048);
         public string ReferrerHost
             => Uri.TryCreate(Referrer, UriKind.Absolute, out Uri uri)
                 ? uri.Host

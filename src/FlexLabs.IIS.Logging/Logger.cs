@@ -8,6 +8,7 @@ namespace FlexLabs.IIS.Logging
         private static string Category = typeof(Logger).Assembly.GetName().Name;
 
         public static bool DebugMode = false;
+        public static bool ConsoleExceptions = false;
 
         public static void DebugWrite(String value)
         {
@@ -24,6 +25,11 @@ namespace FlexLabs.IIS.Logging
         {
             TraceWrite($"[Exception]: {ex.Message}");
             TraceWrite(ex.StackTrace);
+            if (ConsoleExceptions)
+            {
+                Console.WriteLine($"[Exception]: {ex.Message}");
+                Console.WriteLine(ex.StackTrace);
+            }
         }
     }
 }

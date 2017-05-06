@@ -30,6 +30,7 @@ namespace FlexLabs.IIS.Logging
         public string TableName { get; set; }
         public int BatchSize { get; set; }
         public bool SynchronousBatches { get; set; }
+        public bool TimerDisabled { get; set; }
 
         public void Dispose()
         {
@@ -47,7 +48,7 @@ namespace FlexLabs.IIS.Logging
 
         private void StartTimer()
         {
-            if (_timer.Enabled) return;
+            if (_timer.Enabled || TimerDisabled) return;
             Logger.DebugWrite("StartTimer()");
             _timer.Start();
         }

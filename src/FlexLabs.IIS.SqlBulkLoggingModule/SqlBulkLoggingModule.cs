@@ -82,7 +82,7 @@ namespace FlexLabs.IIS.SqlBulkLoggingModule
                 SubStatus = context.Response.SubStatusCode,
                 BytesSent = TryParseInt(context.Response.Headers["Content-Length"]),
                 BytesReceived = TryParseInt(context.Request.ServerVariables["CONTENT_LENGTH"]),
-                ElapsedMilliseconds = Convert.ToInt32(stopWatch.ElapsedMilliseconds),
+                ElapsedMilliseconds = Convert.ToInt32(stopWatch?.ElapsedMilliseconds ?? 0),
                 UserAgent = context.Request.UserAgent.NullIfEmpty(),
                 Referrer = context.Request.UrlReferrer?.ToString(),
                 ReferrerHost = context.Request.UrlReferrer?.Host,
